@@ -6,16 +6,17 @@ Software Design Methodologies Project
 
 We're currently finsihed following features implementations:
 
-Login
-Register
-Search Tour Packages
-Shopping Cart(Add to cart, Edit quantity, Delete cart items)
-Payment Process
-Payment Record Storage
-Profile Update
-Social Media Advertisments
+1. Login
+2. Register
+3. Search Tour Packages
+4. Shopping Cart(Add to cart, Edit quantity, Delete cart items)
+5. Payment Process
+6. Payment Record Storage
+7. Profile Update
+8. Social Media Advertisments
+
 We're still working on following features:
 
-Blog(Add Blog = Add Package)
-Commentting system(Reply and Add comments)
-Google Map link to each blog with marker
+1. Blog(Add Blog = Add Package)
+2. Commentting system(Reply and Add comments)
+3. Google Map link to each blog with marker
