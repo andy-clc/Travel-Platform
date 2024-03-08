@@ -39,7 +39,7 @@
         background: #0000005e;
     }
 
-    button.buy-product-button{
+    button.buy-product-button {
         margin-bottom: 10px;
     }
 
@@ -95,6 +95,10 @@
 
     .grand-total {
         text-align: right;
+    }
+
+    button.buy-product-btn {
+        margin-bottom: 10px;
     }
 </style>
 
@@ -160,7 +164,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -182,7 +186,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -204,7 +208,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -226,7 +230,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -248,7 +252,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -272,7 +276,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block buy-product-btn">Add to Cart</button>
-                            <button class="btn btn-secondary btn-block view-more">Know More</button>
+                            <button class="btn btn-secondary btn-block view-more">View Blog</button>
                         </div>
                     </div>
                 </div>
@@ -308,6 +312,20 @@
     </div>
     <!-- Modal End -->
     <script>
+        //redirect to blog 
+        const viewMoreButtons = document.querySelectorAll('.view-more');
+
+        viewMoreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const packageItemDiv = button.closest('.package-item');
+
+                const packageTitleElement = packageItemDiv.querySelector('.package-title');
+
+                const packageTitleText = packageTitleElement.textContent.replace(/\s+/g, '-');
+
+                window.location.href = `blog.html?${packageTitleText}`;
+            });
+        });
         var queryString = window.location.href.split('?')[1];
         var textAfterQuestionMark = queryString ? queryString.replace(/%20/g, ' ') : '';
 
@@ -372,6 +390,50 @@
                             `;
 
                         buyButton.parentNode.insertBefore(inputWrapper, buyButton.nextSibling);
+                        var inputNumberElement = inputWrapper.querySelector('.input-number');
+                        var decrementButton = inputWrapper.querySelector('.input-number-decrement');
+                        var incrementButton = inputWrapper.querySelector('.input-number-increment');
+
+                        inputNumberElement.addEventListener('input', function () {
+                            var value = parseInt(inputNumberElement.value);
+
+                            if (value === 0) {
+                                buyButton.innerHTML = 'Add to Cart';
+                                inputWrapper.parentNode.removeChild(inputWrapper); // Remove the input wrapper
+                                removeSelectedProduct(packageTitle);
+                            } else if (value >= 2) {
+                                buyButton.innerHTML = 'Selected ' + value + ' Times';
+                                updateSelectedProduct(packageTitle, value, price);
+                            } else {
+                                buyButton.innerHTML = 'Selected 1 Time';
+                                updateSelectedProduct(packageTitle, 1, price);
+                            }
+                        });
+
+                        decrementButton.addEventListener('click', function () {
+                            var value = parseInt(inputNumberElement.value);
+                            value--;
+
+                            if (value < 0) {
+                                value = 0;
+                            }
+
+                            inputNumberElement.value = value;
+                            inputNumberElement.dispatchEvent(new Event('input'));
+                        });
+
+                        incrementButton.addEventListener('click', function () {
+                            var value = parseInt(inputNumberElement.value);
+                            value++;
+
+                            if (value > 10) {
+                                toastbar("Max. 10 orders", 'red')
+                                value = 10;
+                            }
+
+                            inputNumberElement.value = value;
+                            inputNumberElement.dispatchEvent(new Event('input'));
+                        });
 
                         if (quantity === 0) {
                             buyButton.innerHTML = 'Add to Cart';

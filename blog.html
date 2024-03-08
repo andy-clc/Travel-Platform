@@ -90,8 +90,44 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="row pb-3 " id="blog_result">
+                        <!-- Blog Start -->
+                        <div class="container-fluid py-5">
+                            <div class="row">
+                                <!-- Blog Detail Start -->
+                                <div class="pb-3">
+                                    <div class="blog-item">
+                                        <div class="position-relative">
+                                            <img class="img-fluid w-100" src="img/blog-1.jpg" alt="">
+                                            <div class="blog-date">
+                                                <h6 class="font-weight-bold mb-n1">01</h6>
+                                                <small class="text-white text-uppercase">Jan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white mb-3" style="padding: 30px;">
+                                        <div class="d-flex mb-3">
+                                            <a class="text-primary text-uppercase text-decoration-none"
+                                                >Admin</a>
+                                            <span class="text-primary px-2">|</span>
+                                            <a class="text-primary text-uppercase text-decoration-none" >Tours &
+                                                Travel</a>
+                                        </div>
+                                        <h2 class="mb-3">THE BEST NEIGHBORHOODS FOR YOUR VISIT</h2>
+                                        <p>Brisbane is third-largest city in Australia. Most travelers visit the
+                                            city on their way to
+                                            the Gold Coast or as they head up toward Cairns. They tend not to stay
+                                            too long as the city
+                                            doesn’t really have the allure that other parts of Australia does.But
+                                            Brisbane actually has
+                                            plenty to see and do and I think people short change it.</p>
+                                    </div>
+                                </div>
+                                <!-- Blog Detail End -->
 
-                        
+                            </div>
+                        </div>
+                        <!-- Blog End -->
+
                     </div>
                 </div>
 
@@ -173,8 +209,29 @@
             </div>
         </div>
     </div>
+    <button id="getInfoButton">Get Location Information</button>
+    <div id="locationInfo"></div>
     <!-- Blog End -->
+    <script>
+        document.getElementById('getInfoButton').addEventListener('click', () => {
+                const location = "Tokyo";
+                const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects=1&titles=${location}`;
 
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const pages = data.query.pages;
+                        const pageId = Object.keys(pages)[0];
+                        const extract = pages[pageId].extract;
+
+                        // Use the extracted paragraph as needed
+                        document.getElementById('locationInfo').textContent = extract;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Wikipedia API:', error);
+                    });
+            });
+    </script>
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
