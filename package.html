@@ -376,7 +376,7 @@
                 var packageItem = event.target.closest('.package-item');
                 var packageTitle = packageItem.querySelector('.package-title').innerText;
                 var packagePrice = packageItem.querySelector('.package-price').innerText;
-                var priceWithoutSymbol = packagePrice.replace('$', '').replace(',', '');
+                var priceWithoutSymbol = packagePrice.replace('HK$', '').replace(',', '');
                 var priceInt = parseInt(priceWithoutSymbol);
                 var maxstock_Button = packageItem.querySelector('.max_stock');
                 var maxStock = parseInt(maxstock_Button.textContent.match(/\d+/)[0]);
@@ -474,7 +474,6 @@
         var totalCart = document.querySelector('.total-cart');
 
         staticBackdrop.addEventListener('click', function () {
-            console.log(selectedProducts)
             // Clear the table
             table.innerHTML = '';
             var row = document.createElement('tr');
