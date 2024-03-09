@@ -14,6 +14,7 @@ We're currently finsihed following features implementations:
 6. Payment Record Storage
 7. Profile Update
 8. Social Media Advertisments
+9. View Blog
 
 We're still working on following features:
 
