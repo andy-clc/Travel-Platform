@@ -144,7 +144,7 @@ if (bookformContainer) {
                 document.cookie = "Searchinginfo=" + encodeURIComponent(JSON.stringify(bookingData)) + "; expires=" + expiryDate.toUTCString();
 
                 // Open the new page
-                window.open("package.html?" + searchInputValue.value, "_self");
+                window.open("package.html?search=" + searchInputValue.value, "_self");
             });
 
             //Get Blog Data
