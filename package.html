@@ -326,27 +326,46 @@
                 window.location.href = `blog.html?${packageTitleText}`;
             });
         });
-        var queryString = window.location.href.split('?')[1];
-        var textAfterQuestionMark = queryString ? queryString.replace(/%20/g, ' ') : '';
-
-        if (textAfterQuestionMark) {
-            var packageTitles = document.getElementsByClassName('package-title');
-            for (var k = 0; k < packageTitles.length; k++) {
-                var packageTitle = packageTitles[k].textContent;
-                if (packageTitle.replace(/\s+/g, '-').toLowerCase() === textAfterQuestionMark.replace(/\s+/g, '-').toLowerCase()) {
-                    var mainDiv = packageTitles[k].parentNode;
-                    mainDiv.classList.add('flashing');
-                    mainDiv.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => {
-                        mainDiv.classList.remove('flashing');
-                    }, 5000);
-                }
-            }
-        }
+        
         document.addEventListener("DOMContentLoaded", function () {
             if (window.location.href.indexOf("?click") > -1) {
                 var showCartButton = document.getElementById("show_cart");
                 showCartButton.click();
+            }
+            var queryString = window.location.href.split('search=')[1];
+            var textAfterQuestionMark = queryString ? queryString.replace(/%20/g, ' ') : '';
+
+            if (textAfterQuestionMark) {
+                var packageTitles = document.getElementsByClassName('package-title');
+                for (var k = 0; k < packageTitles.length; k++) {
+                    var packageTitle = packageTitles[k].textContent;
+                    if (packageTitle.replace(/\s+/g, '-').toLowerCase() === textAfterQuestionMark.replace(/\s+/g, '-').toLowerCase()) {
+                        var mainDiv = packageTitles[k].parentNode.parentNode;
+                        mainDiv.classList.add('flashing');
+                        mainDiv.scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => {
+                            mainDiv.classList.remove('flashing');
+                        }, 5000);
+                    }
+                }
+            }
+
+            var queryString = window.location.href.split('buy=')[1];
+            var textAfterQuestionMark = queryString ? queryString.replace(/%20/g, ' ') : '';
+
+            if (textAfterQuestionMark) {
+                var packageTitles = document.getElementsByClassName('package-title');
+                for (var k = 0; k < packageTitles.length; k++) {
+                    var packageTitle = packageTitles[k].textContent;
+                    if (packageTitle.replace(/\s+/g, '-').toLowerCase() === textAfterQuestionMark.replace(/\s+/g, '-').toLowerCase()) {
+                        var buyButton = packageTitles[k].parentNode.parentNode.querySelector('.buy-product-btn');
+                        buyButton.click();
+                        var urlWithoutQueryString = window.location.href.split('?')[0];
+                        history.replaceState({}, document.title, urlWithoutQueryString);
+                        alert("You have selected package\npackageTitle:  "+ packageTitle)
+                        break; // Stop the loop after finding the matching element
+                    }
+                }
             }
         });
         var clearCartBtn = document.querySelector('.clear-cart');
