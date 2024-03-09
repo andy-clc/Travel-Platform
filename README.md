@@ -4,21 +4,20 @@ Link: https://bcs-andy.github.io/pang-project/
 
 Software Design Methodologies Project
 
-We're currently finsihed following features implementations:
+We finsihed following features implementations:
 
 1. Login
 2. Register
-3. Search Tour Packages
-4. Shopping Cart(Add to cart, Edit quantity, Delete cart items)
-5. Payment Process
-6. Payment Record Storage
-7. Profile Update
-8. Social Media Advertisments
-9. View Blog
-
-We're still working on following features:
-
-1. Blog(Add Blog = Add Package)
-2. Commentting system(Reply and Add comments)
-3. Google Map link to each blog with marker
-...
+3. Logout
+4. Search Tour Packages
+5. Shopping Cart(Add to cart, Edit quantity, Delete cart items)
+6. Payment Process
+7. Payment Record Storage
+8. Profile Update
+9. Social Media Advertisments
+10. View Blog
+11. Comment in Blog page
+12. Comment in Contact page
+13. Add Blog
+14. Edit Blog
+15. Map Link in Blog.html
