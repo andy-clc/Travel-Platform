@@ -34,21 +34,24 @@ fetch('sub_files/header.html')
         }
         //Logout  
 
-        document.getElementById("logout_btn").addEventListener("click", function (event) {
-            event.preventDefault();
-            // Check if the cookies for email and username exist
-            var emailCookie = getCookie("email");
-            var usernameCookie = getCookie("username");
+        document.querySelectorAll(".logout_btn").forEach(function (button) {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
 
-            if (emailCookie && usernameCookie) {
-                // Delete both cookies
-                deleteCookie("email");
-                deleteCookie("username");
-                toastbar(usernameCookie + " Logged out successfully!", 'green');
-            } else {
-                // Alert the user that they are not logged in
-                toastbar("You are not logged in.", 'red');
-            }
+                // Check if the cookies for email and username exist
+                var emailCookie = getCookie("email");
+                var usernameCookie = getCookie("username");
+
+                if (emailCookie && usernameCookie) {
+                    // Delete both cookies
+                    deleteCookie("email");
+                    deleteCookie("username");
+                    toastbar(usernameCookie + " Logged out successfully!", 'green');
+                } else {
+                    // Alert the user that they are not logged in
+                    toastbar("You are not logged in.", 'red');
+                }
+            });
         });
     })
     .catch(error => {
@@ -266,6 +269,58 @@ if (document.readyState === "complete" || document.readyState === "interactive")
         const userData = JSON.parse(localStorage.getItem('user'));
         console.log('User data retrieved from localStorage:', userData);
         // Call a function or perform any additional operations with the data
+    }
+
+    const package_data = [
+        {
+            "package-title": "Osaka",
+            "package-price": 6800,
+            "date": 10,
+            "max_stock": 10,
+            "location": "Japan"
+        },
+        {
+            "package-title": "Korea culture and foodie",
+            "package-price": 5000,
+            "date": 8,
+            "max_stock": 8,
+            "location": "Korea"
+        },
+        {
+            "package-title": "Taiwan Goodview",
+            "package-price": 3000,
+            "date": 6,
+            "max_stock": 5,
+            "location": "Taiwan"
+        },
+        {
+            "package-title": "Explore Las Vegas of China",
+            "package-price": 1500,
+            "date": 4,
+            "max_stock": 12,
+            "location": "China"
+        },
+        {
+            "package-title": "Osaka Universal Studios Japan Plan",
+            "package-price": 1600,
+            "date": 5,
+            "max_stock": 6,
+            "location": "Japan"
+        },
+        {
+            "package-title": "Discover amazing places of the world with us",
+            "package-price": 350,
+            "date": 2,
+            "max_stock": 15,
+            "location": "Hong Kong"
+        }
+    ];
+    if (!localStorage.getItem('package')) {
+        localStorage.setItem('package', JSON.stringify(package_data));
+        console.log('Package data stored in localStorage:', package_data);
+    } else {
+        const package_data = JSON.parse(localStorage.getItem('package'));
+        console.log('Package data retrieved from localStorage:', package_data);
     }
 };
 
