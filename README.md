@@ -1,5 +1,5 @@
 # pang-project
-Link: https://bcs-andy.github.io/pang-project/contact.html
+Link: https://bcs-andy.github.io/pang-project/
 
 
 Software Design Methodologies Project
