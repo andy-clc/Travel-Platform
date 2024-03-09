@@ -13,7 +13,7 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -27,9 +27,9 @@
 </head>
 
 <body>
-       <!-- Topbar Start -->	
+    <!-- Topbar Start -->
     <div id="header-container"></div>
-	<!-- Topbar End -->
+    <!-- Topbar End -->
 
     <!-- Header Start -->
     <div class="container-fluid page-header">
@@ -48,60 +48,186 @@
 
 
     <!-- Booking Start -->
-  <div id="bookform-container"></div>
+    <div id="bookform-container"></div>
     <!-- Booking End -->
 
 
     <!-- Contact Start -->
-    <div class="container-fluid py-5">
-        <div class="container py-5">
+    <div class="container-fluid">
+        <div class="container">
             <div class="text-center mb-3 pb-3">
                 <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Contact</h6>
                 <h1>Contact For Any Query</h1>
             </div>
             <div class="row justify-content-center">
+                <!-- Comment Section Start 20240309-->
                 <div class="col-lg-8">
-                    <div class="contact-form bg-white" style="padding: 30px;">
-                        <div id="success"></div>
-                        <form name="sentMessage" id="contactForm" novalidate="novalidate">
-                            <div class="form-row">
-                                <div class="control-group col-sm-6">
-                                    <input type="text" class="form-control p-4" id="name" placeholder="Your Name"
-                                        required="required" data-validation-required-message="Please enter your name" />
-                                    <p class="help-block text-danger"></p>
+                    <div class="flex-container">
+                        <div class="comments-container" style="padding: 30px;display: none;">
+                            <h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Comments</h4>
+                        </div>
+                        <div class="bg-white mb-3" style="padding: 30px;">
+                            <form id="commentForm">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name">
                                 </div>
-                                <div class="control-group col-sm-6">
-                                    <input type="email" class="form-control p-4" id="email" placeholder="Your Email"
-                                        required="required" data-validation-required-message="Please enter your email" />
-                                    <p class="help-block text-danger"></p>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email">
                                 </div>
-                            </div>
-                            <div class="control-group">
-                                <input type="text" class="form-control p-4" id="subject" placeholder="Subject"
-                                    required="required" data-validation-required-message="Please enter a subject" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <textarea class="form-control py-3 px-4" rows="5" id="message" placeholder="Message"
-                                    required="required"
-                                    data-validation-required-message="Please enter your message"></textarea>
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="text-center">
-                                <button class="btn btn-primary py-3 px-4" type="submit" id="sendMessageButton">Send Message</button>
-                            </div>
-                        </form>
+
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="submit" value="Leave a comment"
+                                        class="btn btn-primary font-weight-semi-bold py-2 px-3">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Contact End -->
+    <script>
+        //Comment 
+        function getCookie(name) {
+            var cookieName = name + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(";");
 
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i];
+                while (cookie.charAt(0) == " ") {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) == 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
 
-  <!-- Footer Start -->	
+            return "";
+        }
+        var emailCookie = getCookie("email");
+        var usernameCookie = getCookie("username");
+        if (emailCookie) {
+            document.getElementById('name').value = usernameCookie;
+            document.getElementById('email').value = emailCookie;
+        }
+        var userAvatar = "img/testimonial-2.jpg";
+        var replyAvatar = "img/user.jpg";
+
+        document.getElementById('commentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var commentsContainer = document.querySelector('.comments-container');
+            commentsContainer.style.display = 'block';
+
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !message) {
+                toastbar('Please fill in all fields.', 'red');
+                return;
+            }
+
+            addComment(name, message, null, userAvatar);
+
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+        });
+
+        function addComment(name, message, parentId = null, avatar = userAvatar, date = " 03 March 2024") {
+            const commentsContainer = document.querySelector('.comments-container');
+
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('media');
+
+            const img = document.createElement('img');
+            img.src = avatar;
+            img.alt = "Image";
+            img.classList.add('img-fluid', 'mr-3', 'mt-1');
+            img.style.width = '45px';
+            commentDiv.appendChild(img);
+
+            const mediaBodyDiv = document.createElement('div');
+            mediaBodyDiv.classList.add('media-body');
+
+            const h6 = document.createElement('h6');
+            const userLink = document.createElement('a');
+            userLink.href = "#";
+            userLink.textContent = name;
+            h6.appendChild(userLink);
+
+            const small = document.createElement('small');
+            const i = document.createElement('i');
+            i.textContent = date;
+            small.appendChild(i);
+            h6.appendChild(small);
+
+            mediaBodyDiv.appendChild(h6);
+
+            const p = document.createElement('p');
+            p.textContent = message;
+            mediaBodyDiv.appendChild(p);
+
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('btn', 'btn-sm', 'btn-outline-primary');
+            replyButton.textContent = 'Reply';
+            replyButton.onclick = function () {
+                prepareReply(this, avatar);
+            };
+            mediaBodyDiv.appendChild(replyButton);
+
+            commentDiv.appendChild(mediaBodyDiv);
+
+            if (parentId) {
+                const parentElement = document.getElementById(parentId).querySelector('.media-body');
+                const newMediaDiv = document.createElement('div');
+                newMediaDiv.classList.add('media', 'mt-4');
+                newMediaDiv.appendChild(commentDiv);
+                parentElement.appendChild(newMediaDiv);
+            } else {
+                commentsContainer.appendChild(commentDiv);
+            }
+        }
+
+        function prepareReply(button, avatar) {
+            const parentComment = button.parentNode.parentNode;
+            const replyForm = document.createElement('form');
+            replyForm.classList.add('reply-form');
+
+            const textarea = document.createElement('textarea');
+            textarea.classList.add('form-control');
+            replyForm.appendChild(textarea);
+
+            const postReplyButton = document.createElement('button');
+            postReplyButton.type = 'button';
+            postReplyButton.classList.add('btn', 'btn-primary', 'btn-sm');
+            postReplyButton.textContent = 'Post';
+            postReplyButton.onclick = function () {
+                const message = textarea.value.trim();
+                if (message) {
+                    addComment('Tour guide', message, parentComment.id, replyAvatar);
+                    textarea.value = '';
+                    replyForm.remove();
+                }
+            };
+            replyForm.appendChild(postReplyButton);
+
+            parentComment.appendChild(replyForm);
+            button.remove();
+        }
+
+        //End comment
+    </script>
+
+    <!-- Footer Start -->
     <div id="footer-container"></div>
-	<!-- Footer End -->
+    <!-- Footer End -->
 
 
     <!-- Back to Top -->

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TRAVELER - Free Travel Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<style>
+</style>
+
+<body>
+    <div id="header-container"></div>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid page-header">
+        <div class="container">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
+                <h3 class="display-4 text-white text-uppercase">Edit Package</h3>
+                <div class="d-inline-flex text-white">
+                    <p class="m-0 text-uppercase"><a class="text-white" href="/index.html">Home</a></p>
+                    <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                    <p class="m-0 text-uppercase">Edit Package</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Edit Blog Start -->
+    <div class="container-fluid ">
+        <table id="table_account" class=" table  text-center w-100"style="oveflow:auto">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Package Name</th>
+                    <th>Package Price</th>
+                    <th>Stocks</th>
+                    <th>Duration</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+
+
+    </div>
+
+    <!-- Edit Blog End -->
+
+    <!-- Modal Start -->
+    <div class="modal fade" id="editmodal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="editmodalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editmodalLabel">Edit Tour Package</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="mb-3">
+                            <label for="packagename" class="form-label" style="color: #7AB730;">Package
+                                Name(Fixed)</label>
+                            <input type="text" class="form-control" placeholder="Enter Package Name" name="packagename"
+                                value="" disabled />
+
+                            <label for="date" class="form-label" style="color: #7AB730;">Total Duration(Day)</label>
+                            <input type="number" class="form-control" placeholder="Enter the event total duration"
+                                name="date" value="" />
+
+                            <label for="amount" class="form-label" style="color: #7AB730;">Maximium Stock</label>
+                            <input type="number" class="form-control" placeholder="Enter the number of Stock"
+                                name="amount" value="" />
+
+                            <label for="location" class="form-label" style="color: #7AB730;">Location</label>
+                            <input type="text" class="form-control" placeholder="Enter the location" name="location"
+                                value="" />
+
+                            <label for="price" class="form-label" style="color: #7AB730;">Price(HK$)</label>
+                            <input type="number" class="form-control" placeholder="Enter the price of event"
+                                name="price" value="" />
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">submit</button>
+                        <button type="button" class="btn btn-outline-danger mx-2" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <script>
+        let table_account = new DataTable("#table_account", {
+            data: JSON.parse(localStorage.getItem('package')),
+            order: [[0, "asc"]],
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        // Generate a unique ID for each row
+                        return meta.row + 1;
+                    }
+                },
+                {
+                    data: "package-title"
+                },
+                {
+                    data: "package-price"
+                },
+                {
+                    data: "max_stock"
+                },
+                {
+                    data: "date"
+                },
+                {
+                    data: "location"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        // Generate the action button HTML
+                        return `<button class="btn-outline-info" onclick="editPackage(${meta.row})">Edit</button>`;
+                    }
+                }
+            ]
+        });
+        //
+        function editPackage(packageId) {
+            // Get the corresponding row data
+            const rowData = table_account.row(packageId).data();
+            console.log(rowData)
+            const form = document.querySelector('form');
+
+            // Get the input values
+            const packageName = form.elements.packagename;
+            const location = form.elements.location;
+            const date = form.elements.date;
+            const maxStock = form.elements.amount;
+            const price = form.elements.price;
+
+            //Set Values
+            packageName.value = rowData['package-title'];
+            location.value = rowData['location'];
+            date.value = rowData['date'];
+            maxStock.value = rowData['max_stock'];
+            price.value = rowData['package-price'];
+
+            $('#editmodal').modal('show');
+
+            // Handle the form submission
+            const editForm = document.getElementById('editForm');
+            editForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (location === '' || date === '' || maxStock === '' || price === '') {
+                    toastbar('Please fill in all fields.', 'red');
+                    return;
+                }
+                const updatedData = {
+                    'package-title': packageName.value,
+                    'location': location.value,
+                    'date': parseInt(date.value),
+                    'max_stock': parseInt(maxStock.value),
+                    'package-price': parseInt(price.value)
+                };
+                const packageData = JSON.parse(localStorage.getItem('package'));
+
+                // Find and update the matching package
+                const updatedPackageData = packageData.map(package => {
+                    if (package['package-title'] === packageName.value) {
+                        return updatedData;
+                    }
+                    return package;
+                });
+                // Update the "package" data in localStorage
+                localStorage.setItem('package', JSON.stringify(updatedPackageData));
+                const inputFields = form.querySelectorAll('input');
+                inputFields.forEach(input => {
+                    input.disabled = true;
+                });
+                // Display success message
+                toastbar('Package updated successfully.', 'green');
+                setTimeout(() => {
+                    window.location.href = 'editblog.html';
+                }, 2000);
+            });
+        }
+    </script>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
+        <div class="row pt-5">
+            <div class="col-lg-3 col-md-6 mb-5">
+                <a href="" class="navbar-brand">
+                    <h1 class="text-primary">U<span class="text-white">TRAVEL</span></h1>
+                </a>
+                <p>With a wide range of destinations and activities to choose from, we ensure that you can explore and
+                    enjoy your dream vacation without exceeding your budget.</p>
+                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Follow Us</h6>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Our Services</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="about.html"><i class="fa fa-angle-right mr-2"></i>About</a>
+                    <a class="text-white-50 mb-2" href="destination.html"><i
+                            class="fa fa-angle-right mr-2"></i>Destination</a>
+                    <a class="text-white-50 mb-2" href="service.html"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                    <a class="text-white-50 mb-2" href="package.html"><i class="fa fa-angle-right mr-2"></i>Packages</a>
+                    <a class="text-white-50 mb-2" href="guide.html"><i class="fa fa-angle-right mr-2"></i>Guides</a>
+                    <a class="text-white-50 mb-2" href="testimonial.html"><i
+                            class="fa fa-angle-right mr-2"></i>Testimonial</a>
+                    <a class="text-white-50" href="blog.html"><i class="fa fa-angle-right mr-2"></i>Blog</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Usefull Links</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="about.html"><i class="fa fa-angle-right mr-2"></i>About</a>
+                    <a class="text-white-50 mb-2" href="destination.html"><i
+                            class="fa fa-angle-right mr-2"></i>Destination</a>
+                    <a class="text-white-50 mb-2" href="service.html"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                    <a class="text-white-50 mb-2" href="package.html"><i class="fa fa-angle-right mr-2"></i>Packages</a>
+                    <a class="text-white-50 mb-2" href="guide.html"><i class="fa fa-angle-right mr-2"></i>Guides</a>
+                    <a class="text-white-50 mb-2" href="testimonial.html"><i
+                            class="fa fa-angle-right mr-2"></i>Testimonial</a>
+                    <a class="text-white-50" href="blog.html"><i class="fa fa-angle-right mr-2"></i>Blog</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Contact Us</h5>
+                <p><i class="fa fa-map-marker-alt mr-2"></i>UOW College Hong Kong,<br />
+                    1/F, 18 Che Kung Miu Road,<br />
+                    Tai Wai, New Territories,<br />
+                    Hong Kong</p>
+                <p><i class="fa fa-phone-alt mr-2"></i>2707 3111</p>
+                <p><i class="fa fa-envelope mr-2"></i>uowchk-main@uow.edu.au</p>
+                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Newsletter</h6>
+                <div class="w-100">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-light" style="padding: 25px;"
+                            placeholder="Your Email">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary px-3">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5"
+        style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-white-50">Copyright &copy; <a href="#">XXX</a>. All Rights Reserved.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

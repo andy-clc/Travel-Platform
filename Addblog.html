@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TRAVELER - Free Travel Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<style>
+    .tag-buttons {
+        display: inline-flex;
+        gap: 10px;
+        padding: 0 20px;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .tag-button {
+        padding: 5px 15px;
+        border-radius: 20px;
+        background-color: rgb(218, 218, 218);
+        border: none;
+        cursor: pointer;
+    }
+
+    .tag-button:hover {
+        background-color: rgb(196, 196, 196);
+    }
+
+    .tag-button.active {
+        background-color: #555;
+        color: white;
+    }
+
+    span#price-detail {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        padding: 15px;
+        background: var(--light);
+        border-radius: 10px;
+        font-weight: 1000;
+        color: black;
+        box-shadow: 10px 15px 15px #00000085;
+    }
+</style>
+
+<body>
+    <div id="header-container"></div>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid page-header">
+        <div class="container">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
+                <h3 class="display-4 text-white text-uppercase">Add Package</h3>
+                <div class="d-inline-flex text-white">
+                    <p class="m-0 text-uppercase"><a class="text-white" href="/index.html">Home</a></p>
+                    <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                    <p class="m-0 text-uppercase">Add Package</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Add Blog Start -->
+    <div class="container-fluid ">
+        <div class="container ">
+
+            <div class="row" style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+                <div class="col-md-6 offset-md-3 border rounded p-4 m-2">
+                    <h2 class="text-center m-4" style="color: #7AB730;">Add Package Form</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="Name" class="form-label" style="color: #7AB730;">Package Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Package Name" name="packagename"
+                                value="" />
+                            <label for="Date" class="form-label" style="color: #7AB730;">Total Duration</label>
+                            <input type="number" class="form-control" placeholder="Enter the event total duration"
+                                name="date" value="" />
+                            <label for="number" class="form-label" style="color: #7AB730;">Maximium Stock</label>
+                            <input type="number" class="form-control" placeholder="Enter the number of Stock"
+                                name="amount" value="" />
+                            <label for="location" class="form-label" style="color: #7AB730;">Location</label>
+                            <input type="text" class="form-control" placeholder="Enter the location"
+                                name="location" value="" />
+                            <label for="price" class="form-label" style="color: #7AB730;">Price</label>
+                            <input type="number" class="form-control" placeholder="Enter the price of event"
+                                name="price" value="" />
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">submit</button>
+                        <a type="submit" class="btn btn-outline-danger mx-2" href="/package.html">Cancel</a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Add Blog End -->
+    <script>
+        // Get the form element
+        const form = document.querySelector('form');
+
+        // Add a submit event listener to the form
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get the input values
+            const packageName = form.elements.packagename.value.trim().toLowerCase();
+            const location = form.elements.location.value.trim().replace(/\b\w/g, (match) => match.toUpperCase());;
+            const date = parseInt(form.elements.date.value);
+            const maxStock = parseInt(form.elements.amount.value);
+            const price = parseFloat(form.elements.price.value);
+
+            // Get the "package" data from localStorage
+            const packageData = JSON.parse(localStorage.getItem('package')) || [];
+
+            if (packageName === '' || location === '' || isNaN(date) || isNaN(maxStock) || isNaN(price)) {
+                toastbar('Please fill in all fields.', 'red');
+                return;
+            }
+            // Validate package title for duplicates (case-insensitive)
+            const isDuplicate = packageData.some(package => package['package-title'].toLowerCase() === packageName);
+            if (isDuplicate) {
+                toastbar('Package Name already exists. <br>Please enter an unique Package Name.', 'red');
+                return;
+            }
+
+            // Create a new package object
+            const newPackage = {
+                'package-title': packageName,
+                'package-price': price,
+                date,
+                max_stock: maxStock,
+                location: location
+            };
+
+            // Add the new package to the packageData array
+            packageData.push(newPackage);
+
+            // Update the "package" data in localStorage
+            localStorage.setItem('package', JSON.stringify(packageData));
+
+            // Clear the form inputs
+            form.reset();
+
+            // Display a success message or redirect to another page
+            toastbar('Package added successfully!', 'green');
+
+            // Disable all input fields within the form
+            const inputFields = form.querySelectorAll('input');
+            inputFields.forEach(input => {
+                input.disabled = true;
+            });
+            setTimeout(() => {
+                window.location.href = `package.html`;
+            }, 2000);
+        });
+    </script>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
+        <div class="row pt-5">
+            <div class="col-lg-3 col-md-6 mb-5">
+                <a href="" class="navbar-brand">
+                    <h1 class="text-primary">U<span class="text-white">TRAVEL</span></h1>
+                </a>
+                <p>With a wide range of destinations and activities to choose from, we ensure that you can explore and
+                    enjoy your dream vacation without exceeding your budget.</p>
+                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Follow Us</h6>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Our Services</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="about.html"><i class="fa fa-angle-right mr-2"></i>About</a>
+                    <a class="text-white-50 mb-2" href="destination.html"><i
+                            class="fa fa-angle-right mr-2"></i>Destination</a>
+                    <a class="text-white-50 mb-2" href="service.html"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                    <a class="text-white-50 mb-2" href="package.html"><i class="fa fa-angle-right mr-2"></i>Packages</a>
+                    <a class="text-white-50 mb-2" href="guide.html"><i class="fa fa-angle-right mr-2"></i>Guides</a>
+                    <a class="text-white-50 mb-2" href="testimonial.html"><i
+                            class="fa fa-angle-right mr-2"></i>Testimonial</a>
+                    <a class="text-white-50" href="blog.html"><i class="fa fa-angle-right mr-2"></i>Blog</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Usefull Links</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="about.html"><i class="fa fa-angle-right mr-2"></i>About</a>
+                    <a class="text-white-50 mb-2" href="destination.html"><i
+                            class="fa fa-angle-right mr-2"></i>Destination</a>
+                    <a class="text-white-50 mb-2" href="service.html"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                    <a class="text-white-50 mb-2" href="package.html"><i class="fa fa-angle-right mr-2"></i>Packages</a>
+                    <a class="text-white-50 mb-2" href="guide.html"><i class="fa fa-angle-right mr-2"></i>Guides</a>
+                    <a class="text-white-50 mb-2" href="testimonial.html"><i
+                            class="fa fa-angle-right mr-2"></i>Testimonial</a>
+                    <a class="text-white-50" href="blog.html"><i class="fa fa-angle-right mr-2"></i>Blog</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Contact Us</h5>
+                <p><i class="fa fa-map-marker-alt mr-2"></i>UOW College Hong Kong,<br />
+                    1/F, 18 Che Kung Miu Road,<br />
+                    Tai Wai, New Territories,<br />
+                    Hong Kong</p>
+                <p><i class="fa fa-phone-alt mr-2"></i>2707 3111</p>
+                <p><i class="fa fa-envelope mr-2"></i>uowchk-main@uow.edu.au</p>
+                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Newsletter</h6>
+                <div class="w-100">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-light" style="padding: 25px;"
+                            placeholder="Your Email">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary px-3">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5"
+        style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-white-50">Copyright &copy; <a href="#">XXX</a>. All Rights Reserved.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -22,6 +22,12 @@
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
+    <!-- Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -61,6 +67,10 @@
         font-weight: 1000;
         color: black;
         box-shadow: 10px 15px 15px #00000085;
+    }
+
+    #map {
+        height: 50dvh;
     }
 </style>
 
@@ -109,7 +119,7 @@
                                 <div class="pb-3">
                                     <div class="blog-item">
                                         <div class="position-relative d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid" id="blog-img" src="" alt=""style="max-height:500px">
+                                            <img class="img-fluid" id="blog-img" src="" alt="" style="max-height:500px">
                                             <div class="blog-price">
                                                 <a href=""><span id="price-detail">HK$1500 <br>Buy Now</span></a>
                                             </div>
@@ -128,11 +138,12 @@
                                         </div>
                                         <h2 class="mb-3" id="blog-title"></h2>
                                         <p id="blog-description"></p>
-
+                                        <!-- Blog Detail End -->
+                                        <h2>Map Marker</h2>
+                                        <div id="map"></div>
                                     </div>
-                                </div>
-                                <!-- Blog Detail End -->
 
+                                </div>
                             </div>
                         </div>
                         <!-- Blog End -->
@@ -215,15 +226,196 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Comment Section Start 20240309-->
+                <div class="col-md-8">
+                    <div class="flex-container">
+                        <div class="comments-container" style="padding: 30px;display: none;">
+                            <h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Comments</h4>
+                        </div>
+                        <div class="bg-white mb-3" style="padding: 30px;">
+                            <h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Leave a comment</h4>
+                            <form id="commentForm">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="submit" value="Leave a comment"
+                                        class="btn btn-primary font-weight-semi-bold py-2 px-3">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Comment Section End 20240309-->
             </div>
         </div>
     </div>
     <!-- Blog End -->
     <script>
+        //Comment 
+        var userAvatar = "img/testimonial-2.jpg";
+        var replyAvatar = "img/user.jpg";
+
+        document.getElementById('commentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var commentsContainer = document.querySelector('.comments-container');
+            commentsContainer.style.display = 'block';
+
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !message) {
+                toastbar('Please fill in all fields.', 'red');
+                return;
+            }
+
+            addComment(name, message, null, userAvatar);
+
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+        });
+
+        function addComment(name, message, parentId = null, avatar = userAvatar, date = " 03 March 2024") {
+            const commentsContainer = document.querySelector('.comments-container');
+
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('media');
+
+            const img = document.createElement('img');
+            img.src = avatar;
+            img.alt = "Image";
+            img.classList.add('img-fluid', 'mr-3', 'mt-1');
+            img.style.width = '45px';
+            commentDiv.appendChild(img);
+
+            const mediaBodyDiv = document.createElement('div');
+            mediaBodyDiv.classList.add('media-body');
+
+            const h6 = document.createElement('h6');
+            const userLink = document.createElement('a');
+            userLink.href = "#";
+            userLink.textContent = name;
+            h6.appendChild(userLink);
+
+            const small = document.createElement('small');
+            const i = document.createElement('i');
+            i.textContent = date;
+            small.appendChild(i);
+            h6.appendChild(small);
+
+            mediaBodyDiv.appendChild(h6);
+
+            const p = document.createElement('p');
+            p.textContent = message;
+            mediaBodyDiv.appendChild(p);
+
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('btn', 'btn-sm', 'btn-outline-primary');
+            replyButton.textContent = 'Reply';
+            replyButton.onclick = function () {
+                prepareReply(this, avatar);
+            };
+            mediaBodyDiv.appendChild(replyButton);
+
+            commentDiv.appendChild(mediaBodyDiv);
+
+            if (parentId) {
+                const parentElement = document.getElementById(parentId).querySelector('.media-body');
+                const newMediaDiv = document.createElement('div');
+                newMediaDiv.classList.add('media', 'mt-4');
+                newMediaDiv.appendChild(commentDiv);
+                parentElement.appendChild(newMediaDiv);
+            } else {
+                commentsContainer.appendChild(commentDiv);
+            }
+        }
+
+        function prepareReply(button, avatar) {
+            const parentComment = button.parentNode.parentNode;
+            const replyForm = document.createElement('form');
+            replyForm.classList.add('reply-form');
+
+            const textarea = document.createElement('textarea');
+            textarea.classList.add('form-control');
+            replyForm.appendChild(textarea);
+
+            const postReplyButton = document.createElement('button');
+            postReplyButton.type = 'button';
+            postReplyButton.classList.add('btn', 'btn-primary', 'btn-sm');
+            postReplyButton.textContent = 'Post';
+            postReplyButton.onclick = function () {
+                const message = textarea.value.trim();
+                if (message) {
+                    addComment('Tour guide', message, parentComment.id, replyAvatar);
+                    textarea.value = '';
+                    replyForm.remove();
+                }
+            };
+            replyForm.appendChild(postReplyButton);
+
+            parentComment.appendChild(replyForm);
+            button.remove();
+        }
+
+        //End comment
         var queryString = window.location.href.split('?')[1];
         var title = queryString ? queryString.replace(/%20/g, ' ') : '';
 
+        const packageData = JSON.parse(localStorage.getItem('package'));
+        const matchedPackageData = [];
+
+        packageData.forEach(package => {
+            const packageTitle = package['package-title'].toLowerCase().replace(/-/g, ' ');
+            const formattedTitle = title.toLowerCase().replace(/-/g, ' ');
+
+            if (packageTitle === formattedTitle) {
+                matchedPackageData.push(package);
+            }
+        });
         if (title) {
+            // Map
+            const locationName = matchedPackageData[0].location;
+
+            // Create a map centered at a specific location
+            const map = L.map('map').setView([35.6895, 139.6917], 6);
+
+            // Add a tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Create a geocoder control with Nominatim provider
+            const geocoder = L.Control.Geocoder.nominatim();
+
+            // Convert the location name to coordinates
+            geocoder.geocode(locationName, function (results) {
+                if (results.length > 0) {
+                    const { lat, lng } = results[0].center;
+
+                    // Set the map center to the location coordinates
+                    map.setView([lat, lng], 6);
+
+                    // Add a marker to the location
+                    L.marker([lat, lng]).addTo(map)
+                        .bindPopup(locationName)
+                        .openPopup();
+                } else {
+                    console.error('Location not found.');
+                }
+            });
+            //End  Map
 
             // Set the blog title
             document.getElementById('blog-title').textContent = title.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -282,9 +474,9 @@
         }
 
         document.getElementById('price-detail').addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = `package.html?buy=${title}`;
-            });
+            e.preventDefault();
+            window.location.href = `package.html?buy=${title}`;
+        });
     </script>
 
     <!-- Footer Start -->
@@ -366,7 +558,7 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
+    <!-- Google Map -->
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
