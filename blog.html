@@ -121,7 +121,7 @@
                                         <div class="position-relative d-flex justify-content-center align-items-center">
                                             <img class="img-fluid" id="blog-img" src="" alt="" style="max-height:500px">
                                             <div class="blog-price">
-                                                <a href=""><span id="price-detail">HK$1500 <br>Buy Now</span></a>
+                                                <a href=""><span id="price-detail">HK$ <br>Buy Now</span></a>
                                             </div>
                                             <div class="blog-date">
                                                 <h6 class="font-weight-bold mb-n1">01</h6>
@@ -448,35 +448,27 @@
             const loremParagraph = generateLoremParagraph(50);
             document.getElementById('blog-description').innerText = loremParagraph;
 
-            fetch('package.html')
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const packageDivs = doc.querySelectorAll('.package-title');
-
-                    packageDivs.forEach(div => {
-                        const divTitle = div.textContent.trim();
-                        const modifiedTitle = title.replace(/-/g, ' ');
-                        if (divTitle === modifiedTitle) {
-                            const parentDiv = div.closest('.package-item');
-                            const packagePrice = parentDiv.querySelector('.package-price').textContent.trim();
-                            document.getElementById('price-detail').innerHTML = `HK${packagePrice}/Person<br>Buy Now`;
-                            console.log(typeof (parseInt(packagePrice)));
-                        }
-                    });
+            const packageData = JSON.parse(localStorage.getItem('package'));
+            if (packageData) {
+                // Loop through each package
+                packageData.forEach((package) => {
+                    var storage_title = package['package-title'].toLowerCase().replace(/\s/g, '')
+                    var blog_title = document.getElementById('blog-title').textContent.toLowerCase().replace(/\s/g, '')
+                    if (storage_title === blog_title) {
+                        document.getElementById('price-detail').innerHTML = 'HK' + package['package-price'] + '/Person<br>Buy Now';
+                    }
                 })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            window.location.href = `package.html`;
-        }
+            }else{
+                console.error("No data found in local storage")
+            }
+                } else {
+                    window.location.href = `package.html`;
+                }
 
         document.getElementById('price-detail').addEventListener('click', function (e) {
-            e.preventDefault();
-            window.location.href = `package.html?buy=${title}`;
-        });
+                    e.preventDefault();
+                    window.location.href = `package.html?buy=${title}`;
+                });
     </script>
 
     <!-- Footer Start -->
