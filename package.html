@@ -100,6 +100,15 @@
     button.buy-product-btn {
         margin-bottom: 10px;
     }
+
+    .package-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 45px;
+    }
 </style>
 
 <body>
@@ -162,7 +171,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"style="width:100%;overflow:scroll">
                     <table class="show-cart table">
 
                     </table>
@@ -197,7 +206,7 @@
                                             <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>${package['date']} days</small>
                                             <small class="m-0 max_stock"><i class="fa fa-user text-primary mr-2 "></i>Max. Stock: ${package['max_stock']}</small>
                                         </div>
-                                        <a class="h5 text-decoration-none package-title">${package['package-title']}</a>
+                                        <a class="h5 text-decoration-none package-title">${package['package-title'].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</a>
                                         <div class="border-top mt-4 pt-4">
                                             <div class="d-flex justify-content-between">
                                                 <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.9 <small>(100)</small></h6>
@@ -523,10 +532,10 @@
                 quantityInput.addEventListener('input', function () {
                     var newQuantity = parseInt(this.value);
                     var title = this.parentNode.parentNode.children[1].innerText;
-                    
+
 
                     if (parseInt(this.value) >= this.getAttribute('max')) {
-                        toastbar(`Max. ${this.getAttribute('max') } orders`, 'red')
+                        toastbar(`Max. ${this.getAttribute('max')} orders`, 'red')
                         this.value = this.getAttribute('max');
                         newQuantity = parseInt(this.value);
                     }

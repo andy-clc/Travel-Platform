@@ -52,8 +52,8 @@
     <!-- Header End -->
 
     <!-- Edit Blog Start -->
-    <div class="container-fluid ">
-        <table id="table_account" class=" table  text-center w-100"style="oveflow:auto">
+    <div class="container-fluid " style="overflow:scroll">
+        <table id="table_account" class=" table  text-center w-100">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -116,6 +116,23 @@
     </div>
     <!-- Modal End -->
     <script>
+        function getCookie(name) {
+            var cookieName = name + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(";");
+
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i];
+                while (cookie.charAt(0) == " ") {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) == 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+
+            return "";
+        }
         let table_account = new DataTable("#table_account", {
             data: JSON.parse(localStorage.getItem('package')),
             order: [[0, "asc"]],
@@ -181,6 +198,16 @@
 
                 if (location === '' || date === '' || maxStock === '' || price === '') {
                     toastbar('Please fill in all fields.', 'red');
+                    return;
+                }
+                var emailCookie = getCookie("email");
+                var usernameCookie = getCookie("username");
+
+                if (!emailCookie || !usernameCookie) {
+                    toastbar('Please Login first', 'red');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
                     return;
                 }
                 const updatedData = {
