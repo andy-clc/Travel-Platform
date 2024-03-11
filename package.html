@@ -508,7 +508,7 @@
                 var price = product.price;
                 var max_stock = 0;
                 packageData.forEach((package) => {
-                    if (title == package['package-title']) {
+                    if (title.toLowerCase().replace(/\s/g, '') == package['package-title'].toLowerCase().replace(/\s/g, '')) {
                         max_stock = package['max_stock']
                     }
                 })
