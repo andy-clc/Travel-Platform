@@ -70,38 +70,31 @@ if (bookformContainer) {
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
             const maxResults = 4; // Maximum number of search results to display
-
+            var results_count = 0;
             searchInput.addEventListener('input', function () {
                 const searchText = searchInput.value.toLowerCase();
                 searchResults.innerHTML = ''; // Clear previous search results
                 if (searchText !== '') {
-                    fetch('package.html')
-                        .then(response => response.text())
-                        .then(html => {
-                            const parser = new DOMParser();
-                            const doc = parser.parseFromString(html, 'text/html');
-                            const packageTitles = doc.getElementsByClassName('package-title');
-                            
-                            for (let i = 0; i < packageTitles.length; i++) {
-                                const packageTitle = packageTitles[i].textContent;
-                                if (packageTitle.toLowerCase().includes(searchInput.value.toLowerCase())) {
-                                    const listItem = document.createElement('li');
-                                    listItem.textContent = packageTitle;
-                                    searchResults.appendChild(listItem);
-                                }
+                    const packageData = JSON.parse(localStorage.getItem('package'));
+                    if (packageData) {
+                        packageData.forEach((package) => {
+                            console.log(package['package-title'].toLowerCase())
+                            if (package['package-title'].toLowerCase().includes(searchInput.value.toLowerCase())) {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = package['package-title'];
+                                searchResults.appendChild(listItem);
+                                results_count++;
                             }
-                            if (packageTitles.length > 0) {
+                            if (results_count > 0) {
                                 searchResults.style.display = 'block';
                             } else {
                                 searchResults.style.display = 'none';
                             }
                         })
-                        .catch(error => {
-                            console.error('Error fetching package.html:', error);
-                        });
+                    }
                 } else {
                     searchResults.style.display = 'none';
-                }
+                } 
             });
 
             searchResults.addEventListener('click', function (event) {
