@@ -82,10 +82,9 @@
             var total_price = 0;
             var storedData = localStorage.getItem('history_payment');
             if (!storedData) {
-                $("#pay-list").html(`
-                    <tr>
-                        <td colspan=5 class="text-center">No Data Can be Display.</td>
-                    </tr>
+                $("#accordionContainer").html(`
+                        <h3 colspan=5 class="text-center text-danger">No Data Can be Display.</h3>
+                        <a href="package.html" class="d-block m-auto btn btn-outline-primary">Explore Packages</a>
                 `)
                 return
             }
