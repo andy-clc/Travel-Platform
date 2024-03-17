@@ -306,6 +306,41 @@ if (document.readyState === "complete" || document.readyState === "interactive")
             "date": 2,
             "max_stock": 15,
             "location": "Hong Kong"
+        },
+        {
+            "package-title": "Discover amazing places of the world with us",
+            "package-price": 350,
+            "date": 2,
+            "max_stock": 15,
+            "location": "Hong Kong"
+        },
+        {
+            "package-title": "Adventures in the Amazon Rainforest",
+            "package-price": 800,
+            "date": 5,
+            "max_stock": 10,
+            "location": "Amazon Rainforest"
+        },
+        {
+            "package-title": "Safari Experience in Serengeti National Park",
+            "package-price": 1200,
+            "date": 7,
+            "max_stock": 12,
+            "location": "Tanzania"
+        },
+        {
+            "package-title": "Cultural Immersion in Kyoto",
+            "package-price": 500,
+            "date": 3,
+            "max_stock": 8,
+            "location": "Kyoto"
+        },
+        {
+            "package-title": "Island Paradise in the Maldives",
+            "package-price": 1500,
+            "date": 7,
+            "max_stock": 20,
+            "location": "Maldives"
         }
     ];
     if (!localStorage.getItem('package')) {
