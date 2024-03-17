@@ -312,6 +312,8 @@
                     if (packageTitle.replace(/\s+/g, '-').toLowerCase() === title.replace(/\s+/g, '-').toLowerCase()) {
                         var parentDiv = packageTitles[k].closest('.package-item');
                         var buyButton = parentDiv.querySelector('.buy-product-btn');
+                        var maxstock_Button = parentDiv.querySelector('.max_stock');
+                        var maxStock = parseInt(maxstock_Button.textContent.match(/\d+/)[0]);
 
                         var inputWrapper = document.createElement('span');
                         inputWrapper.classList.add('input-wrapper');
@@ -334,12 +336,12 @@
                                 buyButton.innerHTML = 'Add to Cart';
                                 inputWrapper.parentNode.removeChild(inputWrapper); // Remove the input wrapper
                                 removeSelectedProduct(packageTitle);
-                            } else if (value >= 2) {
+                            } else if (value >= 1 && value <= maxStock) {
                                 buyButton.innerHTML = 'Selected ' + value + ' Times';
                                 updateSelectedProduct(packageTitle, value, price);
                             } else {
-                                buyButton.innerHTML = 'Selected 1 Time';
-                                updateSelectedProduct(packageTitle, 1, price);
+                                inputNumberElement.value = maxStock;
+                                toastbar(`Max. ${maxStock} orders`,"red")
                             }
                         });
 
@@ -396,7 +398,7 @@
                     inputWrapper.classList.add('input-wrapper');
                     inputWrapper.setAttribute('data-title', packageTitle.replace(/\s+/g, '-').toLowerCase());
                     inputWrapper.innerHTML = `
-                <span class="input-number-decrement">–</span><input class="input-number" type="text" value="1" min="0" max=""><span class="input-number-increment">+</span>
+                <span class="input-number-decrement">–</span><input class="input-number" type="text" value="1" min="0" max="${maxStock}"><span class="input-number-increment">+</span>
             `;
 
                     var inputNumberElement = inputWrapper.querySelector('.input-number');
@@ -405,17 +407,16 @@
 
                     inputNumberElement.addEventListener('input', function () {
                         var value = parseInt(inputNumberElement.value);
-
                         if (value === 0) {
                             button.innerHTML = 'Add to Cart';
                             inputWrapper.parentNode.removeChild(inputWrapper); // Remove the input wrapper
                             removeSelectedProduct(packageTitle);
-                        } else if (value >= 2) {
+                        } else if (value >= 1 && value <= maxStock) {
                             button.innerHTML = 'Selected ' + value + ' Times';
                             updateSelectedProduct(packageTitle, value, priceInt);
                         } else {
-                            button.innerHTML = 'Selected 1 Time';
-                            updateSelectedProduct(packageTitle, 1, priceInt);
+                            inputNumberElement.value = maxStock;
+                            toastbar(`Max. ${maxStock} orders`, "red")
                         }
                     });
 
