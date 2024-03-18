@@ -210,7 +210,7 @@ if (footerContainer) {
         .then(response => response.text())
         .then(data => {
             footerContainer.innerHTML = data;
-            const currentUrl = window.location.href;
+            /* const currentUrl = window.location.href;
             const currentFilename = currentUrl.substring(currentUrl.lastIndexOf('/') + 1).split('?')[0];
 
             const navBar = document.querySelector('.nav-bar');
@@ -222,7 +222,7 @@ if (footerContainer) {
                 if (currentFilename == linkFilename) {
                     link.classList.add('active');
                 }
-            }
+            } */
         })
         .catch(error => {
             console.error('Error fetching footer:', error);
@@ -379,6 +379,9 @@ if (loginBtn) {
                 document.cookie = "email=" + encodeURIComponent(user.email) + "; path=/";
                 document.cookie = "username=" + encodeURIComponent(user.username) + "; path=/";
                 toastbar("Login successful\nUsername: " + user.username, 'green')
+                setTimeout(() => {
+                    window.location.href = 'index.html'
+                }, 2000);
             } else {
                 // Invalid email or password
                 toastbar("Invalid email or password", 'red')
@@ -450,9 +453,15 @@ if (signBtn) {
         document.querySelector('input[name="phoneno"]').value = '';
 
         // Display a success message as a toast and log the modified data to the console
-        toastbar('Signup successful', 'green');
+        toastbar('Signup successful\nPlease login again', 'green');
+        setTimeout(() => {
+            window.location.href="login.html"
+        }, 2000);
         console.log('Modified Data:', userData);
-
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2000);
+        
     });
 }
 
