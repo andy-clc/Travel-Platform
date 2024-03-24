@@ -1,8 +1,14 @@
-//snack bar
 function toastbar(message, color) {
     var el = document.createElement("div");
     el.className = "snackbar";
     var y = document.getElementById("snackbar-container");
+
+    if (!y) {
+        y = document.createElement("div");
+        y.id = "snackbar-container";
+        document.body.appendChild(y);
+    }
+
     el.style.color = color;
     el.innerHTML = message;
     y.append(el);
