@@ -1,12 +1,12 @@
 # Travel Platform
-Link: https://andy-clc.github.io/Travel-Platform/
-
-University of Wollongong - HK Campus
-Bachelor Degree of Computer Scienc
-eSoftware Design Methodologies Project
-
+Link: https://andy-clc.github.io/Travel-Platform/  
+  
+University of Wollongong - HK Campus  
+Bachelor Degree of Computer Science  
+Software Design Methodologies Project  
+  
 We finsihed following features implementations:
-
+  
 1. Login
 2. Register
 3. Logout
@@ -22,5 +22,5 @@ We finsihed following features implementations:
 13. Add Blog
 14. Edit Blog
 15. Map Link in Blog.html
-
-16. *** This website is a static website, demonstrating methodology we are using.
+  
+** This website is a static website, demonstrating methodology we are using.
