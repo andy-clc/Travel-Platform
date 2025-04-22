@@ -1,8 +1,9 @@
-# pang-project
-Link: https://bcs-andy.github.io/pang-project/
+# Travel Platform
+Link: https://andy-clc.github.io/Travel-Platform/
 
-
-Software Design Methodologies Project
+University of Wollongong - HK Campus
+Bachelor Degree of Computer Scienc
+eSoftware Design Methodologies Project
 
 We finsihed following features implementations:
 
@@ -21,3 +22,5 @@ We finsihed following features implementations:
 13. Add Blog
 14. Edit Blog
 15. Map Link in Blog.html
+
+16. *** This website is a static website, demonstrating methodology we are using.
